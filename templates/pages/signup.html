@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signup</title>
+  <style>
+    body { font-family: sans-serif; background:#eef3fb; margin:0; min-height:100vh; display:grid; place-items:center; }
+    .card { width:min(380px,92%); background:#fff; border:1px solid #d7e2f0; border-radius:12px; padding:18px; }
+    h1 { margin:0 0 12px; font-size:22px; color:#254563; }
+    input, textarea { width:100%; padding:10px; margin:6px 0; border:1px solid #cad9ea; border-radius:8px; }
+    textarea { min-height:70px; resize:vertical; }
+    button { width:100%; padding:10px; border:0; border-radius:8px; background:#2f80df; color:#fff; font-weight:700; cursor:pointer; }
+    .row { margin-top:10px; font-size:13px; color:#5b7592; }
+    .msg { color:#2f80df; font-size:13px; min-height:18px; margin-top:8px; }
+    .err { color:#c0392b; font-size:13px; min-height:18px; }
+    a { color:#2f80df; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Sign Up</h1>
+    <input id="username" placeholder="Username" />
+    <input id="password" type="password" placeholder="Password" />
+    <input id="interests" placeholder="Interests (comma separated): python, ml" />
+    <textarea id="bio" placeholder="Short bio"></textarea>
+    <button id="signupBtn">Create Account</button>
+    <div id="msg" class="msg"></div>
+    <div id="err" class="err"></div>
+    <div class="row">Already have account? <a href="/login/">Login</a></div>
+  </main>
+
+  <script>
+    async function api(path, method, body) {
+      const res = await fetch(path, {
+        method,
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.detail || data.error || JSON.stringify(data));
+      return data;
+    }
+
+    document.getElementById("signupBtn").onclick = async () => {
+      const msg = document.getElementById("msg");
+      const err = document.getElementById("err");
+      msg.textContent = "";
+      err.textContent = "";
+      try {
+        await api("/user/register/", "POST", {
+          username: document.getElementById("username").value.trim(),
+          password: document.getElementById("password").value,
+          interests: document.getElementById("interests").value.split(",").map(x => x.trim()).filter(Boolean),
+          bio: document.getElementById("bio").value.trim(),
+        });
+        msg.textContent = "Account created. Redirecting to login...";
+        setTimeout(() => { window.location.href = "/login/"; }, 700);
+      } catch (e) {
+        err.textContent = e.message;
+      }
+    };
+  </script>
+</body>
+</html>

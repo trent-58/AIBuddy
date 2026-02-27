@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learning Chat</title>
+  <style>
+    body { font-family: sans-serif; background:#eef3fb; margin:0; min-height:100vh; display:grid; place-items:center; }
+    .app { width:min(900px,95%); display:grid; grid-template-columns: 1.7fr 1fr; gap:12px; }
+    .card { background:#fff; border:1px solid #d7e2f0; border-radius:12px; overflow:hidden; }
+    .head { padding:12px; border-bottom:1px solid #e0e8f4; font-weight:700; color:#294c6d; display:flex; justify-content:space-between; }
+    .messages { height:60vh; overflow:auto; padding:12px; background:#f7fbff; display:grid; gap:8px; }
+    .bubble { border:1px solid #d8e4f2; background:#fff; border-radius:8px; padding:8px; font-size:14px; line-height:1.35; }
+    .bubble.ai { background:#2d6099; color:#fff; border-color:transparent; }
+    .name { font-size:12px; font-weight:700; margin-bottom:4px; }
+    .send { border-top:1px solid #e0e8f4; padding:10px; display:grid; gap:8px; }
+    .quick { display:grid; grid-template-columns: repeat(5,1fr); gap:6px; }
+    button { border:0; border-radius:8px; padding:9px; cursor:pointer; font-weight:700; }
+    .q { background:#eaf2ff; color:#2a5687; font-size:12px; }
+    .primary { background:#2f80df; color:#fff; }
+    .inputRow { display:grid; grid-template-columns: 1fr 120px; gap:8px; }
+    input { width:100%; border:1px solid #cad9ea; border-radius:8px; padding:10px; }
+    .side { padding:12px; display:grid; gap:10px; }
+    .box { border:1px solid #dbe5f1; border-radius:8px; padding:10px; background:#f9fcff; }
+    .title { font-weight:700; font-size:13px; color:#2c4f70; margin-bottom:6px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px; color:#4f6882; white-space:pre-wrap; }
+    .small { font-size:13px; color:#5f7892; }
+    @media (max-width: 900px) { .app { grid-template-columns: 1fr; } .messages { height:52vh; } }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="card">
+      <div class="head">
+        <span>AI Learning Chat</span>
+        <span>
+          <button id="evalBtn" class="q">Evaluation</button>
+          <button id="logoutBtn" class="q">Logout</button>
+        </span>
+      </div>
+      <div id="messages" class="messages"></div>
+      <div class="send">
+        <div class="quick">
+          <button class="q" data-cmd="#help">#help</button>
+          <button class="q" data-cmd="#topic">#topic</button>
+          <button class="q" data-cmd="#task">#task</button>
+          <button class="q" data-cmd="#progress">#progress</button>
+          <button class="q" id="answerTplBtn">#answer ...</button>
+        </div>
+        <div class="inputRow">
+          <input id="messageInput" placeholder="Type command: #topic | #task | #answer your_text" />
+          <button id="sendBtn" class="primary">Send</button>
+        </div>
+      </div>
+    </section>
+
+    <aside class="card side">
+      <div class="box">
+        <div class="title">How To Learn Fast</div>
+        <div class="small">1) Run <b>#topic</b> to set focus.<br/>2) Run <b>#task</b> for challenge.<br/>3) Reply <b>#answer ...</b>.<br/>4) Check <b>#progress</b>.</div>
+      </div>
+      <div class="box">
+        <div class="title">Current Topic</div>
+        <div id="topicBox" class="small">Not selected</div>
+      </div>
+      <div class="box">
+        <div class="title">Current Task</div>
+        <div id="taskBox" class="small">No active task</div>
+      </div>
+      <div class="box">
+        <div class="title">Progress</div>
+        <div id="progressBox" class="mono">answers: 0\ntasks: 0\navg: 0/5\nlevel: Beginner</div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const chatId = localStorage.getItem("chat_id");
+    const token = localStorage.getItem("access");
+    const username = localStorage.getItem("username") || "User";
+
+    if (!chatId || !token) window.location.href = "/login/";
+
+    const msgWrap = document.getElementById("messages");
+    const topicBox = document.getElementById("topicBox");
+    const taskBox = document.getElementById("taskBox");
+    const progressBox = document.getElementById("progressBox");
+
+    async function api(path, method = "GET", body = null) {
+      const res = await fetch(path, {
+        method,
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: body ? JSON.stringify(body) : null,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.detail || data.error || JSON.stringify(data));
+      return data;
+    }
+
+    function drawMessages(messages) {
+      msgWrap.innerHTML = "";
+      messages.forEach((m) => {
+        const item = document.createElement("div");
+        item.className = `bubble ${m.sender_type === "ai" ? "ai" : ""}`;
+        item.innerHTML = `<div class="name">${m.sender_username || username}</div><div>${m.content}</div>`;
+        msgWrap.appendChild(item);
+      });
+      msgWrap.scrollTop = msgWrap.scrollHeight;
+    }
+
+    function renderState(st) {
+      const topic = (st.topic || {});
+      const task = (st.task || {});
+      const scores = st.score_history || [];
+      const avg = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(2) : "0.00";
+      const level = Number(avg) >= 4.5 ? "Advanced" : Number(avg) >= 3.5 ? "Intermediate" : Number(avg) >= 2.5 ? "Developing" : "Beginner";
+
+      topicBox.textContent = topic.title ? `${topic.title} - ${topic.explanation || ""}` : "Not selected";
+      taskBox.textContent = task.question || "No active task";
+      progressBox.textContent = `answers: ${st.answers_count || 0}\ntasks: ${st.tasks_count || 0}\navg: ${avg}/5\nlevel: ${level}`;
+    }
+
+    async function refresh() {
+      const [messages, stateResp] = await Promise.all([
+        api(`/chat/sessions/${chatId}/messages/`),
+        api(`/chat/sessions/${chatId}/state/`),
+      ]);
+      drawMessages(messages);
+      renderState(stateResp.command_state || {});
+    }
+
+    async function sendCommand(content) {
+      if (!content) return;
+      await api(`/chat/sessions/${chatId}/send/`, "POST", { content });
+      await refresh();
+    }
+
+    document.getElementById("sendBtn").onclick = async () => {
+      const input = document.getElementById("messageInput");
+      const content = input.value.trim();
+      input.value = "";
+      await sendCommand(content);
+    };
+
+    document.querySelectorAll("button[data-cmd]").forEach((btn) => {
+      btn.onclick = async () => {
+        document.getElementById("messageInput").value = btn.dataset.cmd;
+        await sendCommand(btn.dataset.cmd);
+      };
+    });
+
+    document.getElementById("answerTplBtn").onclick = () => {
+      const input = document.getElementById("messageInput");
+      input.value = "#answer ";
+      input.focus();
+    };
+
+    document.getElementById("evalBtn").onclick = () => { window.location.href = "/app/evaluation/"; };
+    document.getElementById("logoutBtn").onclick = () => {
+      localStorage.removeItem("access");
+      localStorage.removeItem("username");
+      localStorage.removeItem("chat_id");
+      localStorage.removeItem("is_solo");
+      document.cookie = "access_token=; path=/; max-age=0; samesite=lax";
+      window.location.href = "/login/";
+    };
+
+    refresh();
+  </script>
+</body>
+</html>
