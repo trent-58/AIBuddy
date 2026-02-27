@@ -23,6 +23,8 @@ class ChatSelectView(GenericAPIView):
     parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
 
     @extend_schema(
+        summary="Select Or Create Chat",
+        description="Get existing chat or create one. `mode=ai` for AI chat, `mode=person|direct` with `peer_id` for direct chat.",
         request=ChatSelectSerializer,
         responses={status.HTTP_200_OK: ChatSerializer},
     )
@@ -46,7 +48,11 @@ class ChatListView(GenericAPIView):
     serializer_class = ChatSerializer
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(responses={status.HTTP_200_OK: ChatSerializer(many=True)})
+    @extend_schema(
+        summary="List Chats",
+        description="List all chats where current user is a participant.",
+        responses={status.HTTP_200_OK: ChatSerializer(many=True)},
+    )
     def get(self, request):
         chats = (
             ChatsService.list_user_chats(user=request.user)
@@ -61,7 +67,11 @@ class ChatDetailView(GenericAPIView):
     serializer_class = ChatDetailSerializer
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(responses={status.HTTP_200_OK: ChatDetailSerializer})
+    @extend_schema(
+        summary="Get Chat Detail",
+        description="Return chat state and message history for one chat.",
+        responses={status.HTTP_200_OK: ChatDetailSerializer},
+    )
     def get(self, request, chat_id):
         try:
             chat = ChatsService.get_chat_for_user(chat_id=chat_id, user=request.user)
@@ -78,6 +88,8 @@ class ChatMessageView(GenericAPIView):
     parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
 
     @extend_schema(
+        summary="Send Message",
+        description="Send a message to chat. Supports AI commands: #topic, #task, #hint, #answer, #evaluate.",
         request=ChatMessageCreateSerializer,
         responses={status.HTTP_200_OK: OpenApiTypes.OBJECT},
     )

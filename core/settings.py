@@ -119,8 +119,50 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project API',
-    'DESCRIPTION': 'Your project description',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
+    "TITLE": "AIBuddy API",
+    "DESCRIPTION": """
+## Overview
+API-only backend for auth, matching/invites, and chats (AI + direct).
+
+## Authentication
+- Uses JWT (SimpleJWT).
+- Login: `POST /api/auth/login/`
+- Send `Authorization: Bearer <access_token>` for protected endpoints.
+- Logout: `POST /api/auth/logout/` with refresh token.
+
+## Registration (4-step flow)
+1. `POST /api/auth/register/email/` -> send verification code to email
+2. `POST /api/auth/register/verify/` -> verify code, returns `session_token`
+3. `POST /api/auth/register/password/` -> set password
+4. `POST /api/auth/register/complete/` -> set profile and interests
+
+## Interests
+- List options: `GET /api/auth/interests/`
+
+## Matching + Invites
+- `GET /api/matching/candidates/` -> similar-interest users without existing direct chat
+- `POST /api/matching/invites/` -> send invite
+- `GET /api/matching/invites/incoming/`
+- `GET /api/matching/invites/outgoing/`
+- `POST /api/matching/invites/{invite_id}/accept/` -> creates direct chat if needed
+- `POST /api/matching/invites/{invite_id}/reject/`
+
+## Chats
+- Select/create chat: `POST /api/chats/select/`
+  - AI chat: `{ "mode": "ai" }`
+  - Direct chat: `{ "mode": "person", "peer_id": <id> }`
+- List chats: `GET /api/chats/`
+- Chat detail/messages: `GET /api/chats/{chat_id}/`
+- Send message: `POST /api/chats/{chat_id}/messages/`
+
+## AI Commands
+Supported in AI chat, and command-only in direct chat:
+- `#topic` or `#topic <custom topic>`
+- `#task`
+- `#hint`
+- `#answer <your answer>`
+- `#evaluate`
+""",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }

@@ -1,61 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26d62404-0fef-4528-bb51-2521515d833d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/ai_client.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/commands_processor.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/migrations/0002_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/migrations/0003_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/openai_service.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/serializers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/services.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/api_serializers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/api_urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/api_views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/compat_views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/migrations/0002_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/serializers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/services/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/services/command_parser.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/services/openai_client.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/services/session_service.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/services/tutor_service.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/views.py" beforeDir="false" />
+    <list default="true" id="26d62404-0fef-4528-bb51-2521515d833d" name="Changes" comment="ready">
+      <change beforePath="$PROJECT_DIR$/chats/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/chats/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/matching/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/matching/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matching/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/matching/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matching/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matching/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/matching/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matching/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/matching/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matching/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/matching/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,6 +20,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "trent-58"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/trent-58/AIBuddy.git",
+    "accountId": "7d5a5b86-535b-4177-8c8d-a18ff994dfa9"
+  }
+}]]></component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -108,6 +71,19 @@
       <option name="presentableId" value="Default" />
       <updated>1772219064904</updated>
     </task>
+    <task id="LOCAL-00001" summary="ready">
+      <option name="closed" value="true" />
+      <created>1772234692805</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1772234692805</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="ready" />
+    <option name="LAST_COMMIT_MESSAGE" value="ready" />
   </component>
 </project>

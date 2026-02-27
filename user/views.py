@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
@@ -35,6 +36,12 @@ class RegisterEmailView(GenericAPIView):
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
 
+    @extend_schema(
+        summary="Start Registration",
+        description="Step 1: Send email and receive a 6-digit verification code.",
+        request=RegistrationStartSerializer,
+        responses={200: None},
+    )
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -78,6 +85,12 @@ class RegisterVerifyCodeView(GenericAPIView):
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
 
+    @extend_schema(
+        summary="Verify Email Code",
+        description="Step 2: Verify email+code and receive a registration session token.",
+        request=RegistrationVerifyCodeSerializer,
+        responses={200: SessionTokenSerializer},
+    )
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -101,6 +114,12 @@ class RegisterSetPasswordView(GenericAPIView):
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
 
+    @extend_schema(
+        summary="Set Registration Password",
+        description="Step 3: Set password using email + session_token.",
+        request=RegistrationSetPasswordSerializer,
+        responses={200: None},
+    )
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -125,6 +144,12 @@ class RegisterCompleteView(GenericAPIView):
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
 
+    @extend_schema(
+        summary="Complete Registration",
+        description="Step 4: Set profile data and interests, then activate user.",
+        request=RegistrationCompleteSerializer,
+        responses={200: RegistrationCompleteSerializer},
+    )
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -173,6 +198,12 @@ class LoginView(GenericAPIView):
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
 
+    @extend_schema(
+        summary="Login",
+        description="Authenticate with username and password. Returns access+refresh JWT tokens.",
+        request=LoginSerializer,
+        responses={200: TokenPairSerializer},
+    )
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -192,6 +223,12 @@ class LogoutView(GenericAPIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
 
+    @extend_schema(
+        summary="Logout",
+        description="Blacklist refresh token (SimpleJWT token_blacklist must be migrated).",
+        request=LogoutSerializer,
+        responses={204: None},
+    )
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -207,6 +244,11 @@ class InterestOptionListView(GenericAPIView):
     def get_queryset(self):
         return InterestOption.objects.all().order_by("name")
 
+    @extend_schema(
+        summary="List Interest Options",
+        description="Returns available interest options used in registration profile completion.",
+        responses={200: InterestOptionSerializer(many=True)},
+    )
     def get(self, request):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
