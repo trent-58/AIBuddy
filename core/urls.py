@@ -1,33 +1,17 @@
 from django.contrib import admin
 from django.urls import include, path
-from user.views import RegisterView, LoginView
-
-from .views import (
-    LoginPageView,
-    SignupPageView,
-    MatchPageView,
-    ChatPageView,
-    EvaluationPageView,
-)
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
 
     # API
-    path("auth/register", RegisterView.as_view()),
-    path("auth/login", LoginView.as_view()),
-    path("", include("chat.api_urls")),
-    path("user/", include("user.urls")),
-    path("matching/", include("matching.urls")),
-    path("chat/", include("chat.urls")),
-    path("ai/", include("AI.urls")),
+    path("api/auth/", include("user.urls")),
+    path("api/matching/", include("matching.urls")),
+    path("api/chats/", include("chats.urls")),
 
-    # Public auth pages
-    path("login/", LoginPageView.as_view(), name="page-login"),
-    path("signup/", SignupPageView.as_view(), name="page-signup"),
-
-    # Protected pages
-    path("", MatchPageView.as_view(), name="page-match"),
-    path("app/chat/", ChatPageView.as_view(), name="page-chat"),
-    path("app/evaluation/", EvaluationPageView.as_view(), name="page-evaluation"),
+    # swagger
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
