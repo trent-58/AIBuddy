@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/backend/.idea/AIBuddy — копия.iml" filepath="$PROJECT_DIR$/backend/.idea/AIBuddy — копия.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/.idea/AIBuddy.iml" filepath="$PROJECT_DIR$/backend/.idea/AIBuddy.iml" />
     </modules>
   </component>
 </project>

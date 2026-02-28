@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="26d62404-0fef-4528-bb51-2521515d833d" name="Changes" comment="ready">
       <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/AIBuddy — копия.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AIBuddy — копия.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AIBuddy.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AIBuddy.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/serializers.py" afterDir="false" />
