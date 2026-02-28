@@ -16,6 +16,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import EmailVerificationCode, Interest, InterestOption, User
 from .parsers import PlainTextJSONParser
 from .serializers import (
+    ForgotPasswordResetSerializer,
+    ForgotPasswordStartSerializer,
+    ForgotPasswordVerifySerializer,
     InterestOptionSerializer,
     LoginSerializer,
     LogoutSerializer,
@@ -25,6 +28,8 @@ from .serializers import (
     RegistrationVerifyCodeSerializer,
     SessionTokenSerializer,
     TokenPairSerializer,
+    UserProfileSerializer,
+    ResetPasswordSerializer,
     generate_email_code,
     generate_pending_username,
     get_valid_verification,
@@ -252,3 +257,137 @@ class InterestOptionListView(GenericAPIView):
     def get(self, request):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ProfileView(GenericAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        summary="Current User Profile",
+        description="Returns authenticated user's profile information and selected interests.",
+        responses={200: UserProfileSerializer},
+    )
+    def get(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ResetPasswordView(GenericAPIView):
+    serializer_class = ResetPasswordSerializer
+    permission_classes = [IsAuthenticated]
+    parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
+
+    @extend_schema(
+        summary="Reset Password (Authenticated)",
+        description="Reset current user's password using access token.",
+        request=ResetPasswordSerializer,
+        responses={200: None},
+    )
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+        user.set_password(serializer.validated_data["new_password"])
+        user.save(update_fields=["password"])
+
+        return Response({"detail": "Password updated"}, status=status.HTTP_200_OK)
+
+
+class ForgotPasswordEmailView(GenericAPIView):
+    serializer_class = ForgotPasswordStartSerializer
+    permission_classes = [AllowAny]
+    parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
+
+    @extend_schema(
+        summary="Forgot Password: Send Code",
+        description="Send a 6-digit verification code to the user's email.",
+        request=ForgotPasswordStartSerializer,
+        responses={200: None},
+    )
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data["email"].strip().lower()
+
+        user = User.objects.filter(email__iexact=email, is_active=True).first()
+        if user is not None:
+            code = generate_email_code()
+            EmailVerificationCode.objects.create(
+                user=user,
+                email=email,
+                code=code,
+                expires_at=timezone.now() + timedelta(minutes=10),
+            )
+
+            send_mail(
+                subject="Your password reset code",
+                message=f"Your password reset code is: {code}. It expires in 10 minutes.",
+                from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
+                recipient_list=[email],
+                fail_silently=False,
+            )
+
+        return Response(
+            {"detail": "If this email exists, a verification code has been sent"},
+            status=status.HTTP_200_OK,
+        )
+
+
+class ForgotPasswordVerifyCodeView(GenericAPIView):
+    serializer_class = ForgotPasswordVerifySerializer
+    permission_classes = [AllowAny]
+    parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
+
+    @extend_schema(
+        summary="Forgot Password: Verify Code",
+        description="Verify email+code and receive password-reset session token.",
+        request=ForgotPasswordVerifySerializer,
+        responses={200: SessionTokenSerializer},
+    )
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data["email"].strip().lower()
+        code = serializer.validated_data["code"]
+
+        verification = get_valid_verification(email=email, code=code)
+        if verification is None or not verification.user.is_active:
+            return Response({"detail": "Invalid or expired code"}, status=status.HTTP_400_BAD_REQUEST)
+
+        verification.is_verified = True
+        verification.session_token = uuid.uuid4().hex
+        verification.save(update_fields=["is_verified", "session_token"])
+
+        return Response(SessionTokenSerializer({"session_token": verification.session_token}).data, status=status.HTTP_200_OK)
+
+
+class ForgotPasswordResetView(GenericAPIView):
+    serializer_class = ForgotPasswordResetSerializer
+    permission_classes = [AllowAny]
+    parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
+
+    @extend_schema(
+        summary="Forgot Password: Reset",
+        description="Reset password using email + verified session token.",
+        request=ForgotPasswordResetSerializer,
+        responses={200: None},
+    )
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data["email"].strip().lower()
+        session_token = serializer.validated_data["session_token"]
+        password = serializer.validated_data["password"]
+
+        verification = get_valid_verification(email=email, session_token=session_token)
+        if verification is None or not verification.user.is_active:
+            return Response({"detail": "Invalid session token"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = verification.user
+        user.set_password(password)
+        user.save(update_fields=["password"])
+        EmailVerificationCode.objects.filter(user=user).delete()
+
+        return Response({"detail": "Password updated"}, status=status.HTTP_200_OK)

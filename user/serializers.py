@@ -39,6 +39,42 @@ class RegistrationSetPasswordSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True, min_length=8)
 
 
+class ForgotPasswordStartSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class ForgotPasswordVerifySerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    code = serializers.RegexField(regex=r"^\d{6}$")
+
+
+class ForgotPasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    session_token = serializers.CharField()
+    password = serializers.CharField(write_only=True, min_length=8)
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True, trim_whitespace=False)
+    new_password = serializers.CharField(write_only=True, min_length=8, trim_whitespace=False)
+    new_password_confirm = serializers.CharField(write_only=True, min_length=8, trim_whitespace=False)
+
+    def validate(self, attrs):
+        request = self.context.get("request")
+        user = getattr(request, "user", None)
+
+        if user is None or not user.is_authenticated:
+            raise serializers.ValidationError({"detail": "Authentication required"})
+
+        if not user.check_password(attrs["old_password"]):
+            raise serializers.ValidationError({"old_password": ["Old password is incorrect"]})
+
+        if attrs["new_password"] != attrs["new_password_confirm"]:
+            raise serializers.ValidationError({"new_password_confirm": ["Passwords do not match"]})
+
+        return attrs
+
+
 class RegistrationCompleteSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     session_token = serializers.CharField(write_only=True)
@@ -115,6 +151,23 @@ class TokenPairSerializer(serializers.Serializer):
 
 class SessionTokenSerializer(serializers.Serializer):
     session_token = serializers.CharField()
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    selected_interests = InterestSerializer(source="interest_set", many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "bio",
+            "selected_interests",
+        ]
+        read_only_fields = fields
 
 
 def generate_email_code() -> str:
