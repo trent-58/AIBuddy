@@ -170,6 +170,62 @@ class UserProfileSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    interests = serializers.ListField(
+        child=serializers.IntegerField(min_value=1),
+        write_only=True,
+        required=False,
+    )
+    selected_interests = InterestSerializer(source="interest_set", many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "bio",
+            "interests",
+            "selected_interests",
+        ]
+        read_only_fields = ["id", "email", "selected_interests"]
+
+    def validate_username(self, value):
+        user = self.instance
+        if user and User.objects.exclude(id=user.id).filter(username=value).exists():
+            raise serializers.ValidationError("A user with that username already exists.")
+        return value
+
+    def validate_interests(self, value):
+        unique_interest_ids = list(dict.fromkeys(value))
+        found_ids = set(
+            InterestOption.objects.filter(id__in=unique_interest_ids).values_list("id", flat=True)
+        )
+        missing_ids = [item for item in unique_interest_ids if item not in found_ids]
+        if missing_ids:
+            raise serializers.ValidationError(f"Unknown interest option ids: {missing_ids}")
+        return unique_interest_ids
+
+    def update(self, instance, validated_data):
+        interest_ids = validated_data.pop("interests", None)
+
+        for field in ["username", "first_name", "last_name", "bio"]:
+            if field in validated_data:
+                setattr(instance, field, validated_data[field])
+        instance.save()
+
+        if interest_ids is not None:
+            options_by_id = InterestOption.objects.in_bulk(interest_ids)
+            Interest.objects.filter(user=instance).delete()
+            Interest.objects.bulk_create(
+                [Interest(user=instance, name=options_by_id[option_id]) for option_id in interest_ids]
+            )
+
+        return instance
+
+
 def generate_email_code() -> str:
     return f"{random.randint(0, 999999):06d}"
 

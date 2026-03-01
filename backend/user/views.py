@@ -28,6 +28,7 @@ from .serializers import (
     RegistrationVerifyCodeSerializer,
     SessionTokenSerializer,
     TokenPairSerializer,
+    UserProfileUpdateSerializer,
     UserProfileSerializer,
     ResetPasswordSerializer,
     generate_email_code,
@@ -262,6 +263,7 @@ class InterestOptionListView(GenericAPIView):
 class ProfileView(GenericAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
+    parser_classes = [JSONParser, FormParser, MultiPartParser, PlainTextJSONParser]
 
     @extend_schema(
         summary="Current User Profile",
@@ -271,6 +273,30 @@ class ProfileView(GenericAPIView):
     def get(self, request):
         serializer = self.get_serializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(
+        summary="Update Current User Profile",
+        description="Update authenticated user's profile fields and selected interests.",
+        request=UserProfileUpdateSerializer,
+        responses={200: UserProfileSerializer},
+    )
+    def put(self, request):
+        serializer = UserProfileUpdateSerializer(instance=request.user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(UserProfileSerializer(request.user).data, status=status.HTTP_200_OK)
+
+    @extend_schema(
+        summary="Partial Update Current User Profile",
+        description="Partially update authenticated user's profile fields and selected interests.",
+        request=UserProfileUpdateSerializer,
+        responses={200: UserProfileSerializer},
+    )
+    def patch(self, request):
+        serializer = UserProfileUpdateSerializer(instance=request.user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(UserProfileSerializer(request.user).data, status=status.HTTP_200_OK)
 
 
 class ResetPasswordView(GenericAPIView):

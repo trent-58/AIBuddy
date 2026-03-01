@@ -1,0 +1,1054 @@
+/* ============================================================
+   AI BUDDY — App.css
+   Aesthetic: Refined luxury meets soft tech. Clean, airy, and
+   premium. Subtle depth, smooth transitions, polished details.
+   ============================================================ */
+
+   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=Playfair+Display:wght@600;700&display=swap');
+
+   /* ── CSS Variables ─────────────────────────────────────────── */
+   :root {
+     --primary:       #2b4fff;
+     --primary-dark:  #1a36e8;
+     --primary-light: #eef1ff;
+     --primary-glow:  rgba(43, 79, 255, 0.18);
+   
+     --accent:        #00c9a7;
+     --danger:        #e84040;
+     --success:       #12b76a;
+     --warning:       #f59e0b;
+   
+     --bg:            #f5f7fc;
+     --surface:       #ffffff;
+     --surface-2:     #f0f3fb;
+     --border:        #e2e6f3;
+     --border-focus:  #2b4fff;
+   
+     --text-primary:  #0f172a;
+     --text-secondary:#4a5578;
+     --text-muted:    #8c96b5;
+   
+     --radius-sm:     8px;
+     --radius-md:     14px;
+     --radius-lg:     22px;
+     --radius-xl:     32px;
+   
+     --shadow-sm:     0 1px 4px rgba(15,23,42,0.06);
+     --shadow-md:     0 4px 20px rgba(15,23,42,0.10);
+     --shadow-lg:     0 12px 48px rgba(15,23,42,0.13);
+     --shadow-glow:   0 0 0 4px var(--primary-glow);
+   
+     --font-body:     'DM Sans', sans-serif;
+     --font-display:  'Playfair Display', serif;
+   
+     --transition:    all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+     --transition-slow: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+   }
+   
+   /* ── Reset & Base ──────────────────────────────────────────── */
+   *, *::before, *::after {
+     box-sizing: border-box;
+     margin: 0;
+     padding: 0;
+   }
+   
+   html {
+     font-size: 16px;
+     -webkit-font-smoothing: antialiased;
+     -moz-osx-font-smoothing: grayscale;
+   }
+   
+   body {
+     font-family: var(--font-body);
+     background: var(--bg);
+     color: var(--text-primary);
+     min-height: 100vh;
+     background-image:
+       radial-gradient(ellipse 80% 60% at 70% -10%, rgba(43,79,255,0.08) 0%, transparent 60%),
+       radial-gradient(ellipse 60% 50% at -10% 80%, rgba(0,201,167,0.07) 0%, transparent 60%);
+   }
+   
+   #root {
+     min-height: 100vh;
+   }
+   
+   /* ── PUBLIC PAGES (landing, login, register, etc.) ─────────── */
+   .page {
+     min-height: 100vh;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 24px 16px;
+   }
+   
+   .card {
+     background: var(--surface);
+     border-radius: var(--radius-xl);
+     padding: 48px 44px;
+     width: 100%;
+     max-width: 480px;
+     box-shadow: var(--shadow-lg);
+     border: 1px solid var(--border);
+     animation: cardIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
+     position: relative;
+     overflow: hidden;
+   }
+   
+   .card::before {
+     content: '';
+     position: absolute;
+     top: 0; left: 0; right: 0;
+     height: 3px;
+     background: linear-gradient(90deg, var(--primary), var(--accent));
+     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+   }
+   
+   @keyframes cardIn {
+     from { opacity: 0; transform: translateY(28px) scale(0.97); }
+     to   { opacity: 1; transform: translateY(0)    scale(1);    }
+   }
+   
+   .card h1 {
+     font-family: var(--font-display);
+     font-size: 2rem;
+     font-weight: 700;
+     color: var(--text-primary);
+     margin-bottom: 8px;
+     line-height: 1.2;
+   }
+   
+   .card > p {
+     color: var(--text-secondary);
+     font-size: 0.95rem;
+     line-height: 1.6;
+     margin-bottom: 28px;
+   }
+   
+   .about {
+     background: var(--primary-light);
+     border-radius: var(--radius-md);
+     padding: 20px 22px;
+     margin: 20px 0 28px;
+     border-left: 3px solid var(--primary);
+   }
+   
+   .about h2 {
+     font-size: 1rem;
+     font-weight: 600;
+     color: var(--primary-dark);
+     margin-bottom: 8px;
+   }
+   
+   .about p {
+     font-size: 0.88rem;
+     color: var(--text-secondary);
+     line-height: 1.65;
+     margin-bottom: 6px;
+   }
+   .about p:last-child { margin-bottom: 0; }
+   
+   /* ── FORMS ─────────────────────────────────────────────────── */
+   .form {
+     display: flex;
+     flex-direction: column;
+     gap: 6px;
+     margin-bottom: 8px;
+   }
+   
+   .form label {
+     font-size: 0.82rem;
+     font-weight: 600;
+     color: var(--text-secondary);
+     letter-spacing: 0.04em;
+     text-transform: uppercase;
+     margin-top: 10px;
+     margin-bottom: 2px;
+   }
+   
+   .form label:first-child { margin-top: 0; }
+   
+   .form input {
+     width: 100%;
+     padding: 13px 16px;
+     border: 1.5px solid var(--border);
+     border-radius: var(--radius-md);
+     font-family: var(--font-body);
+     font-size: 0.95rem;
+     color: var(--text-primary);
+     background: var(--surface);
+     transition: var(--transition);
+     outline: none;
+   }
+   
+   .form input::placeholder { color: var(--text-muted); }
+   
+   .form input:hover {
+     border-color: #b8c2e8;
+   }
+   
+   .form input:focus {
+     border-color: var(--border-focus);
+     box-shadow: var(--shadow-glow);
+     background: var(--surface);
+   }
+   
+   .form button[type="submit"] {
+     margin-top: 10px;
+   }
+   
+   /* ── BUTTONS ───────────────────────────────────────────────── */
+   button {
+     font-family: var(--font-body);
+     font-size: 0.92rem;
+     font-weight: 600;
+     padding: 12px 22px;
+     border-radius: var(--radius-md);
+     border: none;
+     cursor: pointer;
+     transition: var(--transition);
+     line-height: 1.3;
+     letter-spacing: 0.01em;
+     position: relative;
+     overflow: hidden;
+   }
+   
+   button::after {
+     content: '';
+     position: absolute;
+     inset: 0;
+     opacity: 0;
+     background: rgba(255,255,255,0.15);
+     transition: opacity 0.15s;
+   }
+   button:hover::after { opacity: 1; }
+   
+   /* Primary button (default) */
+   button:not(.button-secondary):not(.logo-button):not(.nav-button):not(.profile-button):not(.logout-button) {
+     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+     color: #fff;
+     box-shadow: 0 4px 14px rgba(43,79,255,0.35);
+   }
+   
+   button:not(.button-secondary):not(.logo-button):not(.nav-button):not(.profile-button):not(.logout-button):hover {
+     transform: translateY(-2px);
+     box-shadow: 0 7px 22px rgba(43,79,255,0.42);
+   }
+   
+   button:not(.button-secondary):not(.logo-button):not(.nav-button):not(.profile-button):not(.logout-button):active {
+     transform: translateY(0);
+     box-shadow: 0 2px 8px rgba(43,79,255,0.25);
+   }
+   
+   button:disabled {
+     opacity: 0.52;
+     cursor: not-allowed;
+     transform: none !important;
+     box-shadow: none !important;
+   }
+   
+   /* Secondary button */
+   .button-secondary {
+     background: transparent;
+     color: var(--primary);
+     border: 1.5px solid var(--border);
+     box-shadow: var(--shadow-sm);
+   }
+   
+   .button-secondary:hover {
+     background: var(--primary-light);
+     border-color: var(--primary);
+     transform: translateY(-1px);
+   }
+   
+   /* Actions row */
+   .actions {
+     display: flex;
+     gap: 10px;
+     flex-wrap: wrap;
+     margin-top: 20px;
+     padding-top: 20px;
+     border-top: 1px solid var(--border);
+   }
+   
+   .actions button {
+     flex: 1;
+     min-width: 100px;
+     text-align: center;
+   }
+   
+   /* ── STATUS MESSAGES ───────────────────────────────────────── */
+   .status-success,
+   .status-error {
+     border-radius: var(--radius-md);
+     padding: 12px 16px;
+     font-size: 0.88rem;
+     font-weight: 500;
+     margin-top: 14px;
+     display: flex;
+     align-items: flex-start;
+     gap: 10px;
+     line-height: 1.5;
+     animation: slideDown 0.25s ease both;
+   }
+   
+   @keyframes slideDown {
+     from { opacity: 0; transform: translateY(-6px); }
+     to   { opacity: 1; transform: translateY(0); }
+   }
+   
+   .status-success {
+     background: rgba(18,183,106,0.08);
+     border: 1px solid rgba(18,183,106,0.25);
+     color: #0a7a45;
+   }
+   
+   .status-success::before {
+     content: '✓';
+     font-weight: 700;
+     color: var(--success);
+     font-size: 0.9rem;
+     flex-shrink: 0;
+     margin-top: 1px;
+   }
+   
+   .status-error {
+     background: rgba(232,64,64,0.07);
+     border: 1px solid rgba(232,64,64,0.22);
+     color: #b52a2a;
+   }
+   
+   .status-error::before {
+     content: '!';
+     font-weight: 700;
+     color: var(--danger);
+     font-size: 0.9rem;
+     flex-shrink: 0;
+     background: rgba(232,64,64,0.12);
+     border-radius: 50%;
+     width: 18px;
+     height: 18px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     margin-top: 1px;
+   }
+   
+   /* ── APP SHELL (authenticated pages) ──────────────────────── */
+   .app-page {
+     min-height: 100vh;
+     display: flex;
+     flex-direction: column;
+     background:
+       linear-gradient(
+         110deg,
+         #ffffff 0%,
+         #eef3ff 20%,
+         #d6e4ff 40%,
+         #b3caff 58%,
+         #7aaaff 76%,
+         #2b4fff 100%
+       );
+     background-attachment: fixed;
+   }
+   
+   /* ── HEADER ────────────────────────────────────────────────── */
+   .app-header {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     padding: 0 28px;
+     height: 62px;
+     background: rgba(255, 255, 255, 0.88);
+     backdrop-filter: blur(16px);
+     -webkit-backdrop-filter: blur(16px);
+     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+     position: sticky;
+     top: 0;
+     z-index: 100;
+     box-shadow: 0 2px 16px rgba(43, 79, 255, 0.08);
+   }
+   
+   .logo-button {
+     font-family: var(--font-display);
+     font-size: 1.25rem;
+     font-weight: 700;
+     color: var(--primary);
+     background: none;
+     border: none;
+     padding: 6px 10px;
+     border-radius: var(--radius-sm);
+     cursor: pointer;
+     letter-spacing: -0.02em;
+     margin-right: 8px;
+     transition: var(--transition);
+   }
+   
+   .logo-button::after { display: none; }
+   
+   .logo-button:hover {
+     background: var(--primary-light);
+     color: var(--primary-dark);
+     transform: none;
+     box-shadow: none;
+   }
+   
+   .nav-button {
+     background: none;
+     border: none;
+     color: var(--text-secondary);
+     font-size: 0.9rem;
+     font-weight: 500;
+     padding: 6px 14px;
+     border-radius: var(--radius-sm);
+     cursor: pointer;
+     transition: var(--transition);
+   }
+   
+   .nav-button::after { display: none; }
+   
+   .nav-button:hover {
+     background: var(--surface-2);
+     color: var(--text-primary);
+     transform: none;
+     box-shadow: none;
+   }
+   
+   .header-actions {
+     display: flex;
+     gap: 8px;
+     margin-left: auto;
+     align-items: center;
+   }
+   
+   .profile-button {
+     background: none;
+     border: 1.5px solid var(--border);
+     color: var(--text-secondary);
+     font-size: 0.88rem;
+     font-weight: 600;
+     padding: 7px 16px;
+     border-radius: var(--radius-md);
+     cursor: pointer;
+     transition: var(--transition);
+   }
+   
+   .profile-button::after { display: none; }
+   
+   .profile-button:hover {
+     background: var(--primary-light);
+     border-color: var(--primary);
+     color: var(--primary);
+     transform: none;
+     box-shadow: none;
+   }
+   
+   .logout-button {
+     background: none;
+     border: none;
+     color: var(--text-muted);
+     font-size: 0.88rem;
+     font-weight: 500;
+     padding: 7px 14px;
+     border-radius: var(--radius-md);
+     cursor: pointer;
+     transition: var(--transition);
+   }
+   
+   .logout-button::after { display: none; }
+   
+   .logout-button:hover {
+     background: rgba(232,64,64,0.07);
+     color: var(--danger);
+     transform: none;
+     box-shadow: none;
+   }
+   
+   /* ── DASHBOARD HERO ────────────────────────────────────────── */
+   .dashboard-hero {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     text-align: center;
+     padding: 0 24px;
+     min-height: calc(100vh - 62px);
+     /* Add your own background-image here when ready:
+        background-image: url('/your-image.jpg');
+        background-size: cover;
+        background-position: center; */
+   }
+   
+   .dashboard-hero h1 {
+     font-family: var(--font-display);
+     font-size: clamp(2rem, 5vw, 3.2rem);
+     font-weight: 700;
+     color: var(--text-primary);
+     line-height: 1.2;
+     letter-spacing: -0.025em;
+     margin-bottom: 36px;
+     animation: fadeUp 0.45s 0.1s ease both;
+     opacity: 0;
+   }
+   
+   .dashboard-hero-cta {
+     animation: fadeUp 0.45s 0.25s ease both;
+     opacity: 0;
+   }
+   
+   .dashboard-hero-cta button {
+     font-size: 1.05rem !important;
+     font-weight: 700 !important;
+     padding: 16px 52px !important;
+     border-radius: 99px !important;
+     letter-spacing: 0.01em;
+   }
+   
+   /* ── APP CONTENT AREA ──────────────────────────────────────── */
+   .app-content {
+     flex: 1;
+     padding: 36px 32px;
+     max-width: 1100px;
+     width: 100%;
+     margin: 0 auto;
+     animation: fadeUp 0.35s ease both;
+   }
+   
+   @keyframes fadeUp {
+     from { opacity: 0; transform: translateY(16px); }
+     to   { opacity: 1; transform: translateY(0); }
+   }
+   
+   .app-content h1 {
+     font-family: var(--font-display);
+     font-size: 1.9rem;
+     font-weight: 700;
+     color: #0f172a;
+     margin-bottom: 10px;
+     letter-spacing: -0.02em;
+     text-align: center;
+     text-shadow: 0 1px 3px rgba(255,255,255,0.6);
+   }
+   
+   /* Subtle decorative line under page titles */
+   .app-content h1::after {
+     content: '';
+     display: block;
+     width: 40px;
+     height: 3px;
+     background: linear-gradient(90deg, var(--primary), var(--accent));
+     border-radius: 99px;
+     margin: 10px auto 24px;
+   }
+   
+   /* ── TOOLBAR ───────────────────────────────────────────────── */
+   .toolbar {
+     display: flex;
+     gap: 10px;
+     flex-wrap: wrap;
+     margin-bottom: 32px;
+     align-items: center;
+     justify-content: center;
+   }
+   
+   .toolbar button {
+     font-size: 0.87rem;
+     padding: 10px 24px;
+     border-radius: 99px !important;
+   }
+   
+   /* ── CHAT LIST & CARDS ─────────────────────────────────────── */
+   .chat-list {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+     gap: 16px;
+   }
+   
+   .chat-item {
+     background: rgba(255, 255, 255, 0.82);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     border: 1px solid rgba(255, 255, 255, 0.6);
+     border-radius: var(--radius-lg);
+     padding: 22px 24px;
+     box-shadow: 0 2px 16px rgba(43, 79, 255, 0.08), 0 1px 4px rgba(43, 79, 255, 0.04);
+     transition: var(--transition);
+   }
+   
+   .chat-item:hover {
+     box-shadow: var(--shadow-md);
+     transform: translateY(-2px);
+     border-color: #c8d0ef;
+   }
+   
+   .chat-item p {
+     font-size: 0.9rem;
+     color: var(--text-secondary);
+     line-height: 1.6;
+     margin-bottom: 6px;
+   }
+   
+   .chat-item p:last-child { margin-bottom: 0; }
+   
+   .chat-item p strong {
+     color: var(--text-primary);
+     font-weight: 600;
+   }
+   
+   .chat-item button {
+     margin-top: 14px;
+     width: 100%;
+     font-size: 0.87rem;
+     padding: 10px;
+   }
+   
+   /* ── CHAT DETAIL ───────────────────────────────────────────── */
+   .chat-detail-meta {
+     margin-bottom: 20px;
+   }
+   
+   .messages-box {
+     background: var(--surface-2);
+     border: 1px solid var(--border);
+     border-radius: var(--radius-lg);
+     padding: 20px;
+     min-height: 240px;
+     max-height: 440px;
+     overflow-y: auto;
+     display: flex;
+     flex-direction: column;
+     gap: 12px;
+     margin-bottom: 20px;
+     scroll-behavior: smooth;
+   }
+   
+   .messages-box::-webkit-scrollbar { width: 5px; }
+   .messages-box::-webkit-scrollbar-track { background: transparent; }
+   .messages-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+   
+   .message-item {
+     background: var(--surface);
+     border: 1px solid var(--border);
+     border-radius: var(--radius-md);
+     padding: 14px 16px;
+     box-shadow: var(--shadow-sm);
+     animation: msgIn 0.2s ease both;
+   }
+   
+   @keyframes msgIn {
+     from { opacity: 0; transform: translateX(-8px); }
+     to   { opacity: 1; transform: translateX(0); }
+   }
+   
+   .message-item p {
+     font-size: 0.9rem;
+     color: var(--text-secondary);
+     line-height: 1.6;
+     margin-bottom: 4px;
+   }
+   
+   .message-item p:last-child { margin-bottom: 0; }
+   
+   .message-item p strong {
+     font-size: 0.78rem;
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: var(--primary);
+   }
+   
+   .message-form {
+     flex-direction: row !important;
+     gap: 12px !important;
+     align-items: flex-end;
+   }
+   
+   .message-form label { display: none; }
+   
+   .message-form input {
+     flex: 1;
+     margin: 0 !important;
+   }
+   
+   .message-form button {
+     flex-shrink: 0;
+     margin: 0 !important;
+   }
+   
+   /* ── MATCHING GRID ─────────────────────────────────────────── */
+   .matching-grid {
+     display: grid;
+     grid-template-columns: repeat(2, 1fr);
+     gap: 20px;
+   }
+   
+   /* Each card gets a subtle left accent color */
+   .matching-grid .chat-item:nth-child(1) { border-left: 3px solid #2b4fff; }
+   .matching-grid .chat-item:nth-child(2) { border-left: 3px solid #00c9a7; }
+   .matching-grid .chat-item:nth-child(3) { border-left: 3px solid #f59e0b; }
+   .matching-grid .chat-item:nth-child(4) { border-left: 3px solid #e84040; }
+   
+   .matching-grid .chat-item h2 {
+     font-family: var(--font-display);
+     font-size: 1.1rem;
+     font-weight: 700;
+     color: var(--text-primary);
+     margin-bottom: 16px;
+     padding-bottom: 12px;
+     border-bottom: 1px solid var(--border);
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     letter-spacing: -0.01em;
+   }
+   
+   /* Card header icons via pseudo-element */
+   .matching-grid .chat-item:nth-child(1) h2::before { content: '⭐'; font-size: 1rem; }
+   .matching-grid .chat-item:nth-child(2) h2::before { content: '👥'; font-size: 1rem; }
+   .matching-grid .chat-item:nth-child(3) h2::before { content: '📬'; font-size: 1rem; }
+   .matching-grid .chat-item:nth-child(4) h2::before { content: '📤'; font-size: 1rem; }
+   
+   /* Empty state text */
+   .matching-grid .chat-item > p {
+     color: var(--text-muted);
+     font-size: 0.88rem;
+     font-style: italic;
+     padding: 12px 0;
+   }
+   
+   .list-row {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 12px;
+     padding: 11px 12px;
+     border-radius: var(--radius-md);
+     margin-bottom: 6px;
+     border: 1px solid transparent;
+     transition: var(--transition);
+   }
+   
+   .list-row:last-child { margin-bottom: 0; }
+   
+   .list-row:hover {
+     background: var(--surface-2);
+     border-color: var(--border);
+   }
+   
+   .list-row p {
+     font-size: 0.88rem;
+     color: var(--text-secondary);
+     margin: 2px 0;
+     line-height: 1.4;
+   }
+   
+   .list-row p strong {
+     color: var(--text-primary);
+     font-weight: 600;
+     font-size: 0.92rem;
+   }
+   
+   /* Status badge */
+   .list-row p:last-child {
+     display: inline-block;
+     font-size: 0.75rem;
+     font-weight: 600;
+     padding: 2px 10px;
+     border-radius: 99px;
+     background: var(--primary-light);
+     color: var(--primary);
+     border: 1px solid rgba(43,79,255,0.15);
+     width: fit-content;
+   }
+   
+   .row-actions {
+     display: flex;
+     gap: 6px;
+     flex-shrink: 0;
+   }
+   
+   .row-actions button {
+     font-size: 0.8rem;
+     padding: 7px 14px;
+     border-radius: 99px !important;
+   }
+   
+   
+   
+   /* ── MATCHING PAGE — best match action buttons ─────────────── */
+   .matching-grid .chat-item .actions {
+     border-top: 1px solid var(--border);
+     margin-top: 16px;
+     padding-top: 14px;
+     gap: 8px;
+   }
+   
+   .matching-grid .chat-item .actions button {
+     border-radius: 99px !important;
+     font-size: 0.85rem !important;
+     padding: 9px 18px !important;
+   }
+   
+   /* Shared interests count badge */
+   .matching-grid .chat-item p:has(+ p) strong {
+     background: var(--primary-light);
+     color: var(--primary);
+     padding: 1px 8px;
+     border-radius: 99px;
+     font-size: 0.82rem;
+   }
+   
+   /* ── PROFILE ───────────────────────────────────────────────── */
+.profile-layout {
+  max-width: 560px;
+  /* Add these lines to center the card container */
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-card {
+  max-width: 560px;
+  width: 100%; /* Ensures it fills the container up to max-width */
+}
+
+.profile-interests {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.profile-interests strong {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.profile-interests ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0; /* Ensures no default padding shifts the alignment */
+}
+
+.profile-interests li {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 99px;
+  border: 1px solid rgba(43,79,255,0.15);
+}
+   
+   .profile-card {
+     max-width: 560px;
+   }
+   
+   .profile-interests {
+     margin-top: 14px;
+     padding-top: 14px;
+     border-top: 1px solid var(--border);
+   }
+   
+   .profile-interests strong {
+     font-size: 0.82rem;
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+     color: var(--text-muted);
+     display: block;
+     margin-bottom: 10px;
+   }
+   
+   .profile-interests ul {
+     list-style: none;
+     display: flex;
+     flex-wrap: wrap;
+     gap: 8px;
+   }
+   
+   .profile-interests li {
+     background: var(--primary-light);
+     color: var(--primary-dark);
+     font-size: 0.82rem;
+     font-weight: 500;
+     padding: 5px 12px;
+     border-radius: 99px;
+     border: 1px solid rgba(43,79,255,0.15);
+   }
+   
+   /* ── MODAL ─────────────────────────────────────────────────── */
+   .modal-overlay {
+     position: fixed;
+     inset: 0;
+     background: rgba(15,23,42,0.45);
+     backdrop-filter: blur(6px);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     z-index: 999;
+     padding: 24px;
+     animation: overlayIn 0.2s ease both;
+   }
+   
+   @keyframes overlayIn {
+     from { opacity: 0; }
+     to   { opacity: 1; }
+   }
+   
+   .modal-card {
+     background: var(--surface);
+     border-radius: var(--radius-xl);
+     padding: 40px;
+     width: 100%;
+     max-width: 440px;
+     box-shadow: var(--shadow-lg), 0 0 0 1px var(--border);
+     animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+     position: relative;
+     overflow: hidden;
+   }
+   
+   .modal-card::before {
+     content: '';
+     position: absolute;
+     top: 0; left: 0; right: 0;
+     height: 3px;
+     background: linear-gradient(90deg, var(--primary), var(--accent));
+   }
+   
+   @keyframes modalIn {
+     from { opacity: 0; transform: scale(0.93) translateY(16px); }
+     to   { opacity: 1; transform: scale(1)    translateY(0); }
+   }
+   
+   .modal-card h2 {
+     font-family: var(--font-display);
+     font-size: 1.5rem;
+     font-weight: 700;
+     margin-bottom: 22px;
+     color: var(--text-primary);
+   }
+   
+   .modal-card .actions {
+     margin-top: 16px;
+     padding-top: 16px;
+   }
+   
+   /* ── LOADING STATE ─────────────────────────────────────────── */
+   p:only-child,
+   .app-content > p {
+     color: var(--text-secondary);
+     font-size: 0.93rem;
+   }
+   
+   /* Loading animation for "Loading..." text */
+   p[class='']:not(.status-success):not(.status-error) {
+     display: inline-flex;
+     align-items: center;
+     gap: 8px;
+   }
+   
+   /* ── MISC ──────────────────────────────────────────────────── */
+   strong { font-weight: 600; }
+   
+   /* Scrollbar global */
+   ::-webkit-scrollbar { width: 6px; height: 6px; }
+   ::-webkit-scrollbar-track { background: transparent; }
+   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+   ::-webkit-scrollbar-thumb:hover { background: #c0cadf; }
+   
+   /* ── RESPONSIVE ────────────────────────────────────────────── */
+   @media (max-width: 640px) {
+     .card {
+       padding: 32px 24px;
+       border-radius: var(--radius-lg);
+     }
+   
+     .card h1 { font-size: 1.6rem; }
+   
+     .app-content { padding: 24px 16px; }
+   
+     .app-header { padding: 0 16px; }
+   
+     .matching-grid,
+     .chat-list {
+       grid-template-columns: 1fr;
+     }
+   
+     .message-form {
+       flex-direction: column !important;
+     }
+   
+     .message-form button {
+       width: 100%;
+     }
+   
+     .modal-card {
+       padding: 28px 22px;
+     }
+   
+     .actions {
+       flex-direction: column;
+     }
+   
+     .actions button {
+       width: 100%;
+     }
+
+   }
+
+.interests-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 5px;
+  margin-bottom: 12px;
+}
+
+button.interest-card {
+  width: auto !important;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid #cfd7ee;
+  color: #3d4a73;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 9px 15px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  filter: saturate(0.75);
+}
+
+button.interest-card:hover {
+  border-color: #8fa4e8;
+  background: #f7f9ff;
+  transform: translateY(-1px);
+  filter: saturate(0.95);
+}
+
+button.interest-card.selected {
+  background: linear-gradient(135deg, #2b4fff, #1a36e8);
+  border-color: #1a36e8;
+  color: #ffffff;
+  box-shadow:
+    0 0 0 3px rgba(43, 79, 255, 0.25),
+    0 8px 20px rgba(43, 79, 255, 0.35);
+  filter: saturate(1);
+  transform: translateY(-1px);
+}
+
+button.interest-card.selected::before {
+  content: "✓ ";
+  font-weight: 800;
+}
+   
