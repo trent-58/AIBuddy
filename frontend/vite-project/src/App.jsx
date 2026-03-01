@@ -954,9 +954,15 @@ function DashboardPage({ navigate, onLogout }) {
   return (
     <main className="app-page">
       <AppHeader navigate={navigate} onLogout={onLogout} />
-      <section className="app-content">
-        <h1>Dashboard</h1>
-        <button onClick={() => navigate('/matching')}>Start Chatting</button>
+
+      <section className="dashboard-hero">
+        <h1>Find your Study Buddy</h1>
+
+        <div className="dashboard-hero-cta">
+          <button onClick={() => navigate('/matching')}>
+            Start Chatting
+          </button>
+        </div>
       </section>
     </main>
   )

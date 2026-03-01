@@ -1,8 +1,17 @@
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
+def api_root(request):
+    return JsonResponse({
+        "message": "AI Buddy API is running.",
+        "frontend": "Open the web app at http://localhost:5173",
+        "docs": "/api/schema/swagger-ui/",
+    })
+
 urlpatterns = [
+    path("", api_root),
     path("admin/", admin.site.urls),
 
     # API
